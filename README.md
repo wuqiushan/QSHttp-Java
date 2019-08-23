@@ -8,7 +8,7 @@
 为简化后期的手机客户端与服务器调试，特此对各个环境进行了封装，本仓库为Java(安卓通用)版本，iOS版本、服务器版本。
 * [x] 支持iOS，[传送门](https://github.com/wuqiushan/QSHttp-OC)
 * [x] 支持android(java)，[传送门](https://github.com/wuqiushan/QSHttp-Java)
-* [x] 支持服务器端口，[传送门](https://github.com/wuqiushan/QSHttp-Server)
+* [x] 支持服务器端，[传送门](https://github.com/wuqiushan/QSHttp-Server)
 
 ### 特点
 * 采用多线程异步请求机制
