@@ -5,8 +5,10 @@
 
 
 ### 概述
-为简化后期的手机客户端与服务器调试，特此对各个环境进行了封装，本仓库为Java(安卓通用)版本，iOS仓库传送门、服务器仓库传送门。
-
+为简化后期的手机客户端与服务器调试，特此对各个环境进行了封装，本仓库为Java(安卓通用)版本，iOS版本、服务器版本。
+* [x] 支持iOS，[传送门](https://github.com/wuqiushan/QSHttp-OC)
+* [x] 支持android(java)，[传送门](https://github.com/wuqiushan/QSHttp-Java)
+* [x] 支持服务器端口，[传送门](https://github.com/wuqiushan/QSHttp-Server)
 
 ### 特点
 * 采用多线程异步请求机制
@@ -35,7 +37,7 @@ allprojects {
 * Step 2. Add the dependency
 ```ruby
 dependencies {
-        implementation 'com.github.wuqiushan:QSHttp-Java:1.0.5'
+        implementation 'com.github.wuqiushan:QSHttp-Java:1.1.1'
 }
 ```
 ##### maven安装
@@ -53,7 +55,7 @@ dependencies {
 <dependency>
     <groupId>com.github.wuqiushan</groupId>
     <artifactId>QSHttp-Java</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -62,9 +64,11 @@ dependencies {
 
 GET方法示例：
 ```Java
-public void http () {
+public static void getTest() {
+
     QSHttp qsHttp = new QSHttp();
-    qsHttp.GET("http://localhost:8080/javaOne_war_exploded/天气jahttp", null, (okMsg)-> {
+    // 测试GET中含有中文
+    qsHttp.GET("http://www.eechot.ga/server/QSHttp/GET/天气", null, (okMsg)-> {
 
         System.out.println("成功：" + okMsg);
 
@@ -78,9 +82,10 @@ public void http () {
 
 POST方法示例：
 ```Java
-public void http () {
+public static void postTest() {
+
     QSHttp qsHttp = new QSHttp();
-    qsHttp.POST("http://localhost:8080/javaOne_war_exploded/天气jahttp", null, (okMsg)-> {
+    qsHttp.POST("http://www.eechot.ga/server/QSHttp/POST", null, (okMsg)-> {
 
         System.out.println("成功：" + okMsg);
 
@@ -94,9 +99,11 @@ public void http () {
 
 download下载文件示例：
 ```Java
-public void http () {
+public static void downloadTest() {
+
     QSHttp qsHttp = new QSHttp();
-    qsHttp.download("http://localhost:8080/javaOne_war_exploded/QSDownloadServlet", null, "/Users/yyd-wlf/Desktop", (progress)-> {
+    // 下载文件，并存入桌面(这里你可以更改成你自己想的路径)
+    qsHttp.download("http://www.eechot.ga/server/QSHttp/Download", null, "/Users/yyd-wlf/Desktop/QSHttpFile", (progress)-> {
 
         int progressInt = (int) (progress * 100);
         System.out.println("下载进度：" + progressInt + "%");
@@ -115,9 +122,11 @@ public void http () {
 
 upload上传文件示例：
 ```Java
-public void http () {
+public static void uploadTest() {
+
     QSHttp qsHttp = new QSHttp();
-    qsHttp.upload("http://localhost:8080/javaOne_war_exploded/QSUploadServlet", "/Users/yyd-wlf/Desktop/123.zip", (progress)-> {
+    // 上传文件 (如果需要本demo测试，请上传小于2M的zip文件，因为服务器能力有限)
+    qsHttp.upload("http://www.eechot.ga/server/QSHttp/Upload", "/Users/yyd-wlf/Desktop/QSHttpFile/nginx-1.16.0.tar.gz", (progress)-> {
 
         int progressInt = (int) (progress * 100);
         System.out.println("上传进度：" + progressInt + "%");
