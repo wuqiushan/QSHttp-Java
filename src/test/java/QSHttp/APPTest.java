@@ -33,4 +33,20 @@ public class APPTest
 
         });
     }
+
+    @Test
+    public void postTest() {
+
+        QSHttp qsHttp = new QSHttp();
+        qsHttp.POST("http://120.77.224.247:18081/user/blackList/add", "{\"uid\": \"108333\"}", (okMsg)-> {
+
+            System.out.println("成功：" + okMsg);
+
+        }, (errorMsg)-> {
+
+            System.out.println("失败：" + errorMsg);
+
+        });
+        System.out.println("down");
+    }
 }

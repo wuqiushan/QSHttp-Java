@@ -2,14 +2,18 @@ package QSHttp.QSHttpMain;
 
 import QSHttp.QSHttp;
 
+import java.util.HashMap;
+
 public class QSMain {
 
     public static void main( String[] args )
     {
-        getTest();
+//        getTest();
         //postTest();
         //downloadTest();
         //uploadTest();
+//        postTest1();
+        postTest2();
     }
 
 
@@ -26,6 +30,38 @@ public class QSMain {
             System.out.println("失败：" + errorMsg);
 
         });
+    }
+
+    public static void postTest1() {
+
+        QSHttp qsHttp = new QSHttp();
+        qsHttp.POST("http://120.77.224.247:18081/user/blackList/add", "{\"uid\": \"101385\"}", (okMsg)-> {
+
+            System.out.println("成功：" + okMsg);
+
+        }, (errorMsg)-> {
+
+            System.out.println("失败：" + errorMsg);
+
+        });
+        System.out.println("down");
+    }
+
+    public static void postTest2() {
+
+        QSHttp qsHttp = new QSHttp();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("ke", "12");
+        qsHttp.POST("http://172.16.1.194:8080/robot-mp-admin/api/web/add/device/fault/info", map, (okMsg)-> {
+
+            System.out.println("成功：" + okMsg);
+
+        }, (errorMsg)-> {
+
+            System.out.println("失败：" + errorMsg);
+
+        });
+        System.out.println("down");
     }
 
     public static void postTest() {

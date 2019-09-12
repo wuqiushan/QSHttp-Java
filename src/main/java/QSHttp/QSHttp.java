@@ -127,9 +127,12 @@ public class QSHttp {
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod(method);
             con.setRequestProperty("Content-Type", "application/json");
+
+//            con.setRequestProperty("Content-Type", "text/plain");
             con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36");
             con.setConnectTimeout(10000);
             con.setReadTimeout(10000);
+
             con.setInstanceFollowRedirects(true);
             con.setDoOutput(true);
             con.setDoInput(true);
@@ -138,7 +141,10 @@ public class QSHttp {
             // 非上传 && 参数  (因为上传文件和参数会有冲突)
             if (!reqType.equals(upload) && param != null) {
                 DataOutputStream out = new DataOutputStream(con.getOutputStream());
-                out.writeBytes(objectToString(param));
+//                out.writeBytes(objectToString(param).getBytes("iso8859-1"));
+//                String paramStr = objectToString(param);
+//                out.write(((String)param).getBytes("utf-8"));
+                out.write(objectToString1(param));
                 out.flush();
                 out.close();
             }
@@ -301,6 +307,38 @@ public class QSHttp {
         }
     }
 
+    private static byte[] objectToString1(Object params) throws UnsupportedEncodingException {
+
+        StringBuilder result = new StringBuilder();
+
+        // 如果是Map
+        if (params instanceof Map) {
+            for (Map.Entry<String, Object> entry : ((Map<String, Object>)params).entrySet()) {
+                result.append(((String) params));
+                result.append("=");
+                // 递归
+                result.append(((String) params));
+                result.append("&");
+            }
+        }
+        // 如果是List
+        else if (params instanceof List) {
+            for (Object element : (List)params) {
+
+            }
+        }
+        // 如果是String
+        else if (params instanceof String){
+//            result.append(URLEncoder.encode((String) params, "utf-8"));
+            result.append(((String) params));
+        }
+
+        String resultStr = result.toString();
+        resultStr = resultStr.length() > 0 ? resultStr.substring(0, (resultStr.length() - 1)) : "";
+
+        return resultStr.getBytes("utf-8");
+    }
+
     /***
      * 将 Object数据转化为 String
      * @param params 传入Map参数
@@ -328,7 +366,8 @@ public class QSHttp {
         }
         // 如果是String
         else if (params instanceof String){
-            result.append(URLEncoder.encode((String) params, "utf-8"));
+//            result.append(URLEncoder.encode((String) params, "utf-8"));
+            result.append(((String) params).getBytes("utf-8"));
         }
 
         String resultStr = result.toString();
