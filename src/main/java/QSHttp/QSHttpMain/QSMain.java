@@ -9,11 +9,11 @@ public class QSMain {
     public static void main( String[] args )
     {
 //        getTest();
-        //postTest();
+        postTest();
         //downloadTest();
         //uploadTest();
 //        postTest1();
-        postTest2();
+//        postTest2();
     }
 
 
@@ -32,10 +32,11 @@ public class QSMain {
         });
     }
 
+    /*
     public static void postTest1() {
 
         QSHttp qsHttp = new QSHttp();
-        qsHttp.POST("http://120.77.224.247:18081/user/blackList/add", "{\"uid\": \"101385\"}", (okMsg)-> {
+        qsHttp.POSTSync("http://120.77.224.247:18081/user/blackList/add", "{\"uid\": \"101385\"}", (okMsg)-> {
 
             System.out.println("成功：" + okMsg);
 
@@ -62,7 +63,7 @@ public class QSMain {
 
         });
         System.out.println("down");
-    }
+    } */
 
     public static void postTest() {
 

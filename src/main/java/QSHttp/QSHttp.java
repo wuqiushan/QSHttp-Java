@@ -21,7 +21,7 @@ public class QSHttp {
 
 
     /***
-     * GET 请求
+     * GET 异步请求
      * @param urlStr  请求Url
      * @param param   请求参数
      * @param success 请求成功响应
@@ -29,35 +29,58 @@ public class QSHttp {
      */
     public void GET(String urlStr, Object param, QSRspSuccess success, QSRspFailure failure) {
         QSHttpManage.shareInstance().threadPool.submit(()-> {
-            try {
-                this.requestBase(get, urlStr, "GET", param, null, null, null, success, failure);
-            } catch (Exception e) {
-                failure.failure(e.getMessage());
-            }
+            this.GETSync(urlStr, param, success, failure);
         });
     }
 
     /***
-     * POST 请求
+     * GET 同步请求
+     * @param urlStr  请求Url
+     * @param param   请求参数
+     * @param success 请求成功响应
+     * @param failure 请求失败响应
+     */
+    public void GETSync(String urlStr, Object param, QSRspSuccess success, QSRspFailure failure) {
+        try {
+            this.requestBase(get, urlStr, "GET", param, null, null, null, success, failure);
+        } catch (Exception e) {
+            failure.failure(e.getMessage());
+        }
+    }
+
+
+    /***
+     * POST 异步请求
      * @param urlStr  请求Url
      * @param param   请求参数
      * @param success 请求成功响应
      * @param failure 请求失败响应
      */
     public void POST(String urlStr, Object param, QSRspSuccess success, QSRspFailure failure) {
+
         QSHttpManage.shareInstance().threadPool.submit(()-> {
-            try {
-                this.requestBase(post, urlStr, "POST", param, null, null, null, success, failure);
-            } catch (Exception e) {
-                failure.failure(e.getMessage());
-            }
+            this.POSTSync(urlStr, param, success, failure);
         });
     }
 
+    /***
+     * POST 同步请求
+     * @param urlStr  请求Url
+     * @param param   请求参数
+     * @param success 请求成功响应
+     * @param failure 请求失败响应
+     */
+    public void POSTSync(String urlStr, Object param, QSRspSuccess success, QSRspFailure failure) {
+        try {
+            this.requestBase(post, urlStr, "POST", param, null, null, null, success, failure);
+        } catch (Exception e) {
+            failure.failure(e.getMessage());
+        }
+    }
 
 
     /**
-     * 下载文件
+     * 下载文件 异步下载
      * @param urlStr  请求Url
      * @param param   请求参数
      * @param storagePath 下载需要保存的位置
@@ -69,16 +92,32 @@ public class QSHttp {
                          QSRspSuccess success, QSRspFailure failure) {
 
         QSHttpManage.shareInstance().threadPool.submit(()-> {
-            try {
-                this.requestBase(download, urlStr, "GET", null, null, storagePath, progress, success, failure);
-            } catch (Exception e) {
-                failure.failure(e.getMessage());
-            }
+            this.downloadSync(urlStr, param, storagePath, progress, success, failure);
         });
     }
 
     /**
-     *
+     * 下载文件 同步下载
+     * @param urlStr  请求Url
+     * @param param   请求参数
+     * @param storagePath 下载需要保存的位置
+     * @param progress 下载时的进度(0.0 - 1.0)
+     * @param success 请求成功响应
+     * @param failure 请求失败响应
+     */
+    public void downloadSync(String urlStr, Object param, String storagePath, QSRspProgress progress,
+                         QSRspSuccess success, QSRspFailure failure) {
+
+        try {
+            this.requestBase(download, urlStr, "GET", null, null, storagePath, progress, success, failure);
+        } catch (Exception e) {
+            failure.failure(e.getMessage());
+        }
+    }
+
+
+    /**
+     * 上传文件 异步上传
      * @param urlStr 请求的Url
      * @param filePath 文件路径
      * @param progress 文件上传进度回调
@@ -90,13 +129,29 @@ public class QSHttp {
                        QSRspSuccess success, QSRspFailure failure) {
 
         QSHttpManage.shareInstance().threadPool.submit(()-> {
-            try {
-                this.requestBase(upload, urlStr, "POST", null, null, filePath, progress, success, failure);
-            } catch (Exception e) {
-                failure.failure(e.getMessage());
-            }
+            this.uploadSync(urlStr, filePath, progress, success, failure);
         });
     }
+
+    /**
+     * 上传文件 同步上传
+     * @param urlStr 请求的Url
+     * @param filePath 文件路径
+     * @param progress 文件上传进度回调
+     * @param success 请求成功响应
+     * @param failure 请求失败响应
+     * @throws Exception  异常处理
+     */
+    public void uploadSync(String urlStr, String filePath, QSRspProgress progress,
+                       QSRspSuccess success, QSRspFailure failure) {
+
+        try {
+            this.requestBase(upload, urlStr, "POST", null, null, filePath, progress, success, failure);
+        } catch (Exception e) {
+            failure.failure(e.getMessage());
+        }
+    }
+
 
     /**
      * 请求基类
@@ -125,26 +180,24 @@ public class QSHttp {
              */
             URL url = new URL(urlEncodeChinese(urlStr));
             con = (HttpURLConnection) url.openConnection();
+
             con.setRequestMethod(method);
             con.setRequestProperty("Content-Type", "application/json");
-
-//            con.setRequestProperty("Content-Type", "text/plain");
+            //con.setRequestProperty("Content-Type", "text/plain");
             con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36");
             con.setConnectTimeout(10000);
             con.setReadTimeout(10000);
 
             con.setInstanceFollowRedirects(true);
             con.setDoOutput(true);
+
             con.setDoInput(true);
 
             // 设置请求参数
             // 非上传 && 参数  (因为上传文件和参数会有冲突)
             if (!reqType.equals(upload) && param != null) {
                 DataOutputStream out = new DataOutputStream(con.getOutputStream());
-//                out.writeBytes(objectToString(param).getBytes("iso8859-1"));
-//                String paramStr = objectToString(param);
-//                out.write(((String)param).getBytes("utf-8"));
-                out.write(objectToString1(param));
+                out.write(objectToString(param));
                 out.flush();
                 out.close();
             }
@@ -307,54 +360,22 @@ public class QSHttp {
         }
     }
 
-    private static byte[] objectToString1(Object params) throws UnsupportedEncodingException {
-
-        StringBuilder result = new StringBuilder();
-
-        // 如果是Map
-        if (params instanceof Map) {
-            for (Map.Entry<String, Object> entry : ((Map<String, Object>)params).entrySet()) {
-                result.append(((String) params));
-                result.append("=");
-                // 递归
-                result.append(((String) params));
-                result.append("&");
-            }
-        }
-        // 如果是List
-        else if (params instanceof List) {
-            for (Object element : (List)params) {
-
-            }
-        }
-        // 如果是String
-        else if (params instanceof String){
-//            result.append(URLEncoder.encode((String) params, "utf-8"));
-            result.append(((String) params));
-        }
-
-        String resultStr = result.toString();
-        resultStr = resultStr.length() > 0 ? resultStr.substring(0, (resultStr.length() - 1)) : "";
-
-        return resultStr.getBytes("utf-8");
-    }
-
     /***
      * 将 Object数据转化为 String
      * @param params 传入Map参数
      * @return 拼接后的字符串
      */
-    private static String objectToString(Object params) throws UnsupportedEncodingException {
+    private static byte[] objectToString(Object params) throws UnsupportedEncodingException {
 
         StringBuilder result = new StringBuilder();
 
         // 如果是Map
         if (params instanceof Map) {
             for (Map.Entry<String, Object> entry : ((Map<String, Object>)params).entrySet()) {
-                result.append(URLEncoder.encode(entry.getKey(), "utf-8"));
+                result.append(((String) params));
                 result.append("=");
                 // 递归
-                result.append(URLEncoder.encode(objectToString(entry.getValue()), "utf-8"));
+                result.append(((String) params));
                 result.append("&");
             }
         }
@@ -366,14 +387,18 @@ public class QSHttp {
         }
         // 如果是String
         else if (params instanceof String){
-//            result.append(URLEncoder.encode((String) params, "utf-8"));
-            result.append(((String) params).getBytes("utf-8"));
+            result.append(((String) params));
         }
 
         String resultStr = result.toString();
-        resultStr = resultStr.length() > 0 ? resultStr.substring(0, (resultStr.length() - 1)) : "";
+        if (resultStr == null) {
+            resultStr = "";
+        }
+        else if ((resultStr.length() > 0) && resultStr.endsWith("&")) {
+            resultStr = resultStr.substring(0, (resultStr.length() - 1));
+        }
 
-        return resultStr;
+        return resultStr.getBytes("utf-8");
     }
 
     /**
