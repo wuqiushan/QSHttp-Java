@@ -1,17 +1,16 @@
+![image](https://github.com/SimonGitHub123/QSHttp-OC/blob/master/QSHttp-OC.png)
 
-![image](https://github.com/wuqiushan/QSHttp-Java/blob/master/QSHttp-Java.png)
-
-[![Build Status](https://travis-ci.org/shuzheng/zheng.svg?branch=master)](https://github.com/SimonGitHub123/QSHttp-OC)  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![language](https://img.shields.io/badge/language-java-green.svg)](1) [![](https://www.jitpack.io/v/wuqiushan/QSHttp-Java.svg)](https://www.jitpack.io/#wuqiushan/QSHttp-Java)
+[![](https://img.shields.io/badge/build-pass-green.svg)](https://www.jitpack.io/#wuqiushan/QSHttp-Java) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![language](https://img.shields.io/badge/language-java-green.svg)](1) [![](https://www.jitpack.io/v/wuqiushan/QSHttp-Java.svg)](https://www.jitpack.io/#wuqiushan/QSHttp-Java)
 
 
 ### 概述
-为简化后期的手机客户端与服务器调试，特此对各个环境进行了封装，本仓库为Java(安卓通用)版本，iOS版本、服务器版本。
+为简化后期的手机客户端与服务器调试，特此对各个环境进行了封装，本仓库为Java(安卓通用)版本，其它有iOS版本、服务器版本。
 * [x] 支持iOS，[传送门](https://github.com/wuqiushan/QSHttp-OC)
 * [x] 支持android(java)，[传送门](https://github.com/wuqiushan/QSHttp-Java)
 * [x] 支持服务器端，[传送门](https://github.com/wuqiushan/QSHttp-Server)
 
 ### 特点
-* 采用多线程异步请求机制
+* 采用多线程异步(或同步)请求机制
 * 支持请求的URL带有中文
 
 
@@ -19,6 +18,7 @@
 * [x] 完成基本的GET、POST、上传、下载、等操作
 * [x] 完成请求后数据回传，通labda方法
 * [x] 完成上传、下载的实时进度
+* [x] 支持异步和同步请求
 * [ ] 支持无网通知
 
 
@@ -37,7 +37,7 @@ allprojects {
 * Step 2. Add the dependency
 ```ruby
 dependencies {
-        implementation 'com.github.wuqiushan:QSHttp-Java:1.1.1'
+        implementation 'com.github.wuqiushan:QSHttp-Java:1.2.1'
 }
 ```
 ##### maven安装
@@ -55,7 +55,7 @@ dependencies {
 <dependency>
     <groupId>com.github.wuqiushan</groupId>
     <artifactId>QSHttp-Java</artifactId>
-    <version>1.1.1</version>
+    <version>1.2.1</version>
 </dependency>
 ```
 
