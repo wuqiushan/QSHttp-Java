@@ -1,4 +1,4 @@
-![image](https://github.com/SimonGitHub123/QSHttp-OC/blob/master/QSHttp-OC.png)
+![image](https://github.com/SimonGitHub123/QSHttp-OC/blob/master/QSHttp-Java.png)
 
 [![](https://img.shields.io/badge/build-pass-green.svg)](https://www.jitpack.io/#wuqiushan/QSHttp-Java) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![language](https://img.shields.io/badge/language-java-green.svg)](1) [![](https://www.jitpack.io/v/wuqiushan/QSHttp-Java.svg)](https://www.jitpack.io/#wuqiushan/QSHttp-Java)
 
